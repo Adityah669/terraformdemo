@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main
+ 
+pool:
+  vmImage: 'ubuntu-latest'
+ 
+variables:
+  azureServiceConnection: 'AzureServiceConnection'
+  resourceGroup: 'test-rg01'
+  location: 'centralindia'
+ 
+stages:
+- stage: Terraform_Deploy
+  displayName: 'Deploy Logic App via Terraform'
+  jobs:
+  - job: TerraformJob
+    displayName: 'Terraform Init and Apply'
+    steps:
+    - task: TerraformInstaller@1
+      displayName: 'Install Terraform'
+      inputs:
+        terraformVersion: '1.5.7'  # or your preferred version
+ 
+    - task: AzureCLI@2
+      displayName: 'Terraform Init'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          terraform init
+ 
+    - task: AzureCLI@2
+      displayName: 'Terraform Apply'
+      inputs:
+        azureSubscription: $(azureServiceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          terraform apply -auto-approve
