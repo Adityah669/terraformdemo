@@ -11,9 +11,9 @@ provider "azurerm" {
 }
 resource "azurerm_logic_app_workflow" "res-0" {
   enabled                            = true
-  integration_service_environment_id = ""
+  integration_service_environment_id = "False"
   location                           = "northcentralus"
-  logic_app_integration_account_id   = ""
+  logic_app_integration_account_id   = "False"
   name                               = "consumptionlogicapp"
   parameters = {
     "$connections" = "{\"visualstudioteamservices\":{\"connectionId\":\"/subscriptions/12486a52-70e3-4ae6-9f94-e6bacd147419/resourceGroups/demonewtest_group/providers/Microsoft.Web/connections/visualstudioteamservices-2\",\"connectionName\":\"visualstudioteamservices-2\",\"id\":\"/subscriptions/12486a52-70e3-4ae6-9f94-e6bacd147419/providers/Microsoft.Web/locations/northcentralus/managedApis/visualstudioteamservices\"}}"
