@@ -20,7 +20,7 @@ stages:
     - job: Build
       displayName:  Terraform Build Job
       pool:
-        vmImage: mypool
+        vmImage: 'mypool'
       steps:
       - task: TerraformInstaller@1
         inputs: 
