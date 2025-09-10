@@ -3,9 +3,6 @@ trigger:
 
 pool:
     name: 'mypool'
-    demands:
-    - agent.os -equals Windows
-
 
 variables:
   ARM_CLIENT_ID: $(ARM_CLIENT_ID)
@@ -19,8 +16,6 @@ stages:
     jobs:
     - job: Build
       displayName:  Terraform Build Job
-      pool:
-        vmImage: 'mypool'
       steps:
       - task: TerraformInstaller@1
         inputs: 
