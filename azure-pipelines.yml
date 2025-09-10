@@ -2,7 +2,9 @@ trigger:
   - main
 
 pool:
-  vmImage: 'Windows'
+    name: 'mypool'
+    demands:
+    - agent.os -equals Windows
 
 variables:
   TF_VAR_client_id: $(ARM_CLIENT_ID)
