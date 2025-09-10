@@ -14,26 +14,61 @@ variables:
   ARM_TENANT_ID: $(ARM_TENANT_ID)
 
 stages:
-  - stage: TerraformPlan
+  - stage: Terraform
+    displayName: Terraform Build stage
     jobs:
-      - job: Plan
-        steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
-          - script: |
-              terraform plan -out=tfplan
-            displayName: 'Terraform Init and Plan'
+    - job: Build
+      displayName:  Terraform Build Job
+      pool:
+        vmImage: mypool
+      steps:
+      - task: TerraformInstaller@1
+        inputs: 
+          terraformVersion: 'latest'
 
-  - stage: TerraformApply
-    jobs:
-      - job: Apply
-        steps:
-          - task: TerraformInstaller@0
-            inputs:
-              terraformVersion: 'latest'
-          - script: |
-              echo "Logging into Azure..."
-              az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
-              terraform apply -auto-approve tfplan
-            displayName: 'Terraform Apply'
+      - task: TerraformTask@5
+        displayName: init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
+          backendAzureRmUseEntraIdForAuthentication: false
+          backendServiceArm: 'testconnection'
+          backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+          backendAzureRmResourceGroupName: 'demonewtest_group'
+          backendAzureRmStorageAccountName: 'demonewtestgroupa219'
+          backendAzureRmContainerName: 'demonew'
+          backendAzureRmKey: 'infra.aks.tfstate'
+
+      - task: TerraformTask@5
+        displayName: validate
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+
+      - task: TerraformTask@5
+        displayName: format
+        inputs:
+          provider: 'azurerm'
+          command: 'custom'
+          outputTo: 'console'
+          customCommand: 'fmt'
+          environmentServiceNameAzureRM: 'testconnection'
+
+      - task: TerraformTask@5
+        displayName: plan
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
+          environmentServiceNameAzureRM: 'testconnection'
+          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+
+      - task: TerraformTask@5
+        displayName: apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
+          environmentServiceNameAzureRM: 'testconnection'
+          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
