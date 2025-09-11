@@ -1,14 +1,8 @@
 trigger:
-  - main
+  - none
 
 pool:
   vmImage: 'mypool'
-
-variables:
-  ARM_CLIENT_ID: $(ARM_CLIENT_ID)
-  ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
-  ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
-  ARM_TENANT_ID: $(ARM_TENANT_ID)
 
 stages:
   - stage: Terraform
@@ -20,50 +14,14 @@ stages:
       - task: TerraformInstaller@1
         inputs: 
           terraformVersion: 'latest'
-
       - task: TerraformTask@5
-        displayName: init
         inputs:
           provider: 'azurerm'
           command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
           backendAzureRmUseEntraIdForAuthentication: false
           backendServiceArm: 'testconnection'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmResourceGroupName: 'demonewtest_group'
           backendAzureRmStorageAccountName: 'demonewtestgroupa219'
           backendAzureRmContainerName: 'demonew'
-          backendAzureRmKey: 'infra.aks.tfstate'
-
-      - task: TerraformTask@5
-        displayName: validate
-        inputs:
-          provider: 'azurerm'
-          command: 'validate'
-
-      - task: TerraformTask@5
-        displayName: format
-        inputs:
-          provider: 'azurerm'
-          command: 'custom'
-          outputTo: 'console'
-          customCommand: 'fmt'
-          environmentServiceNameAzureRM: 'testconnection'
-
-      - task: TerraformTask@5
-        displayName: plan
-        inputs:
-          provider: 'azurerm'
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
-          environmentServiceNameAzureRM: 'testconnection'
-          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
-
-      - task: TerraformTask@5
-        displayName: apply
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/env'
-          environmentServiceNameAzureRM: 'testconnection'
-          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+          backendAzureRmKey: 'Logicapp.terraform.tfstate'
