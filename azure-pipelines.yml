@@ -25,3 +25,10 @@ stages:
           backendAzureRmStorageAccountName: 'demonewtestgroupa219'
           backendAzureRmContainerName: 'demonew'
           backendAzureRmKey: 'Logicapp.terraform.tfstate'
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          environmentServiceNameAzureRM: 'testconnection'
+          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+
