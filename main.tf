@@ -1,3 +1,4 @@
-resource_group_name = "demonewtestnewgroup"{
-  tags                = {}
+resource "azurerm_resource_group" "example" {
+  name     = "newresourcegroupmain"
+  location = "West Europe"
 }
