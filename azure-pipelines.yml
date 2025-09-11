@@ -2,7 +2,7 @@ trigger:
   - main
 
 pool:
-  vmImage: 'mypool'
+ name: 'mypool'
 
 stages:
   - stage: Terraform
