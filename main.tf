@@ -1,3 +1,3 @@
-resource_group_name = "demonewtestnew_group"{
+resource_group_name = "demonewtestnewgroup"{
   tags                = {}
 }
