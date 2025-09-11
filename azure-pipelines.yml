@@ -19,7 +19,7 @@ stages:
           provider: 'azurerm'
           command: 'init'
           backendAzureRmUseEntraIdForAuthentication: false
-          backendServiceArm: 'testconnection'
+          backendServiceArm: 'Myconnectionactive'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmResourceGroupName: 'demonewtest_group'
           backendAzureRmStorageAccountName: 'demonewtestgroup9344'
@@ -30,7 +30,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          environmentServiceNameAzureRM: 'testconnection'
+          environmentServiceNameAzureRM: 'Myconnectionactive'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
 
@@ -39,7 +39,7 @@ stages:
           provider: 'azurerm'
           command: 'apply'
           commandOptions: '--auto-approve'
-          environmentServiceNameAzureRM: 'testconnection'
+          environmentServiceNameAzureRM: 'Myconnectionactive'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
       
 
