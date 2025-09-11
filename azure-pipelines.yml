@@ -30,7 +30,7 @@ stages:
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmResourceGroupName: 'demonewtest_group'
           backendAzureRmStorageAccountName: 'demonewtestgroupa219'
-          backendAzureRmContainerName: 'Newcontainer'
+          backendAzureRmContainerName: 'testnew'
           backendAzureRmKey: 'Logicapp.terraform.tfstate'
 
       - task: TerraformTask@5
