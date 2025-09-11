@@ -9,17 +9,17 @@ terraform {
 provider "azurerm" {
   features {}
 }
+ resource_group_name = "demonewtest_group"
+  tags                = {}
+  workflow_parameters = {
+    "$connections" = "{\"defaultValue\":{},\"type\":\"Object\"}"
+  }
 resource "azurerm_logic_app_workflow" "res-0" {
   enabled                            = true
   location                           = "northcentralus"
   name                               = "consumptionlogicapp"
   parameters = {
     "$connections" = "{\"visualstudioteamservices\":{\"connectionId\":\"/subscriptions/12486a52-70e3-4ae6-9f94-e6bacd147419/resourceGroups/demonewtest_group/providers/Microsoft.Web/connections/visualstudioteamservices-2\",\"connectionName\":\"visualstudioteamservices-2\",\"id\":\"/subscriptions/12486a52-70e3-4ae6-9f94-e6bacd147419/providers/Microsoft.Web/locations/northcentralus/managedApis/visualstudioteamservices\"}}"
-  }
-  resource_group_name = "demonewtest_group"
-  tags                = {}
-  workflow_parameters = {
-    "$connections" = "{\"defaultValue\":{},\"type\":\"Object\"}"
   }
   workflow_schema  = "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"
   workflow_version = "1.0.0.0"
