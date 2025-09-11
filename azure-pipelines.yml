@@ -22,7 +22,7 @@ stages:
           backendServiceArm: 'testconnection'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmResourceGroupName: 'demonewtest_group'
-          backendAzureRmStorageAccountName: 'demonewtestgroupa219'
+          backendAzureRmStorageAccountName: 'demonewtestgroup9344'
           backendAzureRmContainerName: 'demonew'
           backendAzureRmKey: 'Logicapp.terraform.tfstate'
 
