@@ -18,8 +18,13 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          backendAzureRmUseEntraIdForAuthentication: false
-          backendServiceArm: 'testconnection'
+          environmentServiceNameAzureRM: 'testconnection'
+          environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+          backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
+          backendAzureRmResourceGroupName: 'demonewtest_group'
+          backendAzureRmStorageAccountName: 'demonewtestgroupa219'
+          backendAzureRmContainerName: 'testnew'
+          backendAzureRmKey: 'Logicapp.terraform.tfstate'
 
       - task: TerraformTask@5
         inputs:
@@ -28,10 +33,6 @@ stages:
           environmentServiceNameAzureRM: 'testconnection'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
-          backendAzureRmResourceGroupName: 'demonewtest_group'
-          backendAzureRmStorageAccountName: 'demonewtestgroupa219'
-          backendAzureRmContainerName: 'testnew'
-          backendAzureRmKey: 'Logicapp.terraform.tfstate'
 
       - task: TerraformTask@5
         inputs:
