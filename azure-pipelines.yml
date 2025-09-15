@@ -1,5 +1,5 @@
 trigger:
-  - None
+  - Main
 
 pool:
  name: 'mypool'
