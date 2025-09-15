@@ -30,7 +30,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'plan'
-          commandOptions: '-lock=false'''
+          commandOptions: '-lock=false'
           environmentServiceNameAzureRM: 'Myconnectionactive'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
 
