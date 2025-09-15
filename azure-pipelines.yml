@@ -23,7 +23,7 @@ stages:
           backendAzureRmResourceGroupName: 'demonewtest_group'
           backendAzureRmStorageAccountName: 'demonewtestgroupa219'
           backendAzureRmContainerName: 'demonew'
-          backendAzureRmKey: 'tf/terraform.tfstate'
+          backendAzureRmKey: 'trf/terraform.tfstate'
 
       - task: TerraformTask@5
         inputs:
