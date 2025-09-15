@@ -15,3 +15,9 @@ resource "azurerm_logic_app_trigger_recurrence" "example" {
   frequency    = "Day"
   interval     = 1
 }
+resource "azurerm_logic_app_action_http" "example" {
+  name         = "webhook"
+  logic_app_id = azurerm_logic_app_workflow.example.id
+  method       = "GET"
+  uri          = "http://example.com/some-webhook"
+}
