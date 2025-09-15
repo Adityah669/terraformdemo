@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = "logicapp-rg"
   location = "East US"
