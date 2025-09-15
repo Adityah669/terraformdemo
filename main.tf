@@ -1,6 +1,6 @@
 
 resource "azurerm_resource_group" "example" {
-  name     = "logicapp-consumption-rg1"
+  name     = "logicapp-consumption"
   location = "East US"
 }
 
