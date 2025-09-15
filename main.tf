@@ -19,5 +19,5 @@ resource "azurerm_logic_app_action_http" "example" {
   name         = "webhook"
   logic_app_id = azurerm_logic_app_workflow.example.id
   method       = "GET"
-  uri          = "http://example.com/some-webhook"
+  uri          = "https://github.com/Adityah669/"
 }
