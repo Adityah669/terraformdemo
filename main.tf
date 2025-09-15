@@ -8,7 +8,7 @@ resource "azurerm_logic_app_workflow" "logicapp" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  definition = jsonencode({
+  definition = 
     "$schema" = "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#"
     "actions" = {
       "Send_email" = {
@@ -50,7 +50,6 @@ resource "azurerm_logic_app_workflow" "logicapp" {
         }
       }
     }
-  })
 
   parameters = {}
 }
