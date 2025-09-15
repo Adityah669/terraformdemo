@@ -12,8 +12,8 @@ resource "azurerm_logic_app_workflow" "example" {
 resource "azurerm_logic_app_trigger_recurrence" "example" {
   name         = "run-every-day"
   logic_app_id = azurerm_logic_app_workflow.example.id
-  frequency    = "Minutes"
-  interval     = 5
+  frequency    = "Minute"
+  interval     = 2
 }
 resource "azurerm_logic_app_action_http" "example" {
   name         = "webhook"
