@@ -38,7 +38,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          commandOptions: '--auto-approve'
+          commandOptions: '--auto-approve -lock=false'
           environmentServiceNameAzureRM: 'Myconnectionactive'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
       
