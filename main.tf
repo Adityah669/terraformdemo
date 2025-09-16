@@ -12,7 +12,7 @@ resource "azurerm_logic_app_workflow" "example" {
 resource "azurerm_logic_app_trigger_recurrence" "example" {
   name         = "runeveryday"
   logic_app_id = azurerm_logic_app_workflow.example.id
-  frequency    = "Day"
+  frequency    = "Week"
   interval     = 1
 }
 resource "azurerm_logic_app_action_http" "example" {
