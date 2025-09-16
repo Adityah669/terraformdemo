@@ -12,23 +12,12 @@ resource "azurerm_logic_app_workflow" "example" {
 resource "azurerm_logic_app_trigger_recurrence" "example" {
   name         = "run-every-day"
   logic_app_id = azurerm_logic_app_workflow.example.id
-  frequency    = "Minute"
-  interval     = 2
+  frequency    = "Day"
+  interval     = 1
 }
 resource "azurerm_logic_app_action_http" "example" {
   name         = "webhook"
   logic_app_id = azurerm_logic_app_workflow.example.id
   method       = "GET"
   uri          = "https://github.com/Adityah669/"
-}
-resource "azurerm_storage_account" "example" {
-  name                     = "newstoragename123"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-
-  tags = {
-    environment = "staging"
-  }
 }
