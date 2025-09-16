@@ -4,13 +4,13 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_logic_app_workflow" "example" {
-  name                = "workflownew"
+  name                = "workflownew1"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_logic_app_trigger_recurrence" "example" {
-  name         = "run-every-day"
+  name         = "runeveryday"
   logic_app_id = azurerm_logic_app_workflow.example.id
   frequency    = "Day"
   interval     = 1
