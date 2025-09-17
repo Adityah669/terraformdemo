@@ -12,12 +12,12 @@ resource "azurerm_logic_app_workflow" "example" {
 resource "azurerm_logic_app_trigger_recurrence" "example" {
   name         = "runeveryday"
   logic_app_id = azurerm_logic_app_workflow.example.id
-  frequency    = "Week"
+  frequency    = "Minute"
   interval     = 1
 }
 resource "azurerm_logic_app_action_http" "example" {
   name         = "webhook"
   logic_app_id = azurerm_logic_app_workflow.example.id
   method       = "GET"
-  uri          = "https://github.com/Adityah669/"
+  uri          = "https://github.com/Adityah669"
 }
