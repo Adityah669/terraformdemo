@@ -47,7 +47,7 @@ resource "azurerm_storage_share" "content" {
 #----------------------------------------------------
 # RBAC Permissions
 #----------------------------------------------------
-resource "azurerm_role_assignment" "blob" {
+resource "azurerm_role_assignment" "Storage" {
   scope                = azurerm_storage_account.storage.id
   role_definition_name = "Storage Account Contributor "
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
