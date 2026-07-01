@@ -33,7 +33,6 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   public_network_access_enabled = true
-  shared_access_key_enabled = false
 
   min_tls_version = "TLS1_2"
 }
