@@ -1,11 +1,11 @@
 variable "subscription_id" {}
 
 variable "resource_group_name" {
-  default = "rg-logicapp-prod"
+  default = "demonewtest_group"
 }
 
 variable "location" {
-  default = "East US"
+  default = "Canada Central"
 }
 
 variable "logicapp_name" {
