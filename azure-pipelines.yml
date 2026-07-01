@@ -35,7 +35,7 @@ stages:
           provider: 'azurerm'
           command: 'plan'
           commandOptions: '-lock=false'
-          environmentServiceNameAzureRM: 'Myconnectionactive'
+          environmentServiceNameAzureRM: 'Mynewactiveconnection'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
 
       - task: TerraformTask@5
@@ -43,7 +43,7 @@ stages:
           provider: 'azurerm'
           command: 'apply'
           commandOptions: '--auto-approve -lock=false'
-          environmentServiceNameAzureRM: 'Myconnectionactive'
+          environmentServiceNameAzureRM: 'Mynewactiveconnection'
           environmentAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
       
 
