@@ -5,7 +5,7 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  default = "Canada Central"
+  default = "Canada central"
 }
 
 variable "logicapp_name" {
