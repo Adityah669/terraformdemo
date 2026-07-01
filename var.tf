@@ -1,7 +1,7 @@
 variable "subscription_id" {}
 
 variable "resource_group_name" {
-  default = "demonewtest_group"
+  default = "demonewtestresourcegroup"
 }
 
 variable "location" {
