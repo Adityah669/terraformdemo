@@ -93,7 +93,6 @@ resource "azurerm_logic_app_standard" "logicapp" {
   name                       = var.logicapp_name
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
-  storage_account_access_key = false
   app_service_plan_id        = azurerm_service_plan.plan.id
   storage_account_name       = azurerm_storage_account.storage.name
 
