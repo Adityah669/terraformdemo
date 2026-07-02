@@ -94,6 +94,7 @@ resource "azurerm_logic_app_standard" "logicapp" {
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   app_service_plan_id        = azurerm_service_plan.plan.id
+  storage_account_access_key = False
   storage_account_name       = azurerm_storage_account.storage.name
 
 
@@ -107,6 +108,8 @@ resource "azurerm_logic_app_standard" "logicapp" {
   app_settings = {
 
     FUNCTIONS_WORKER_RUNTIME      = "node"
+    AzureFunctionsJobHost__extensionBundle__version  = "[1.*, 2.0.0)"
+    WEBSITE_NODE_DEFAULT_VERSION  = "22"
     FUNCTIONS_EXTENSION_VERSION   = "~4"
     WEBSITE_RUN_FROM_PACKAGE      = "1"
 
