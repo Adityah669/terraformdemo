@@ -17,7 +17,7 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'init'
-          backendServiceArm: 'Myconnectionactive'
+          backendServiceArm: 'Mynewactiveconnection'
           backendAzureRmOverrideSubscriptionID: '12486a52-70e3-4ae6-9f94-e6bacd147419'
           backendAzureRmResourceGroupName: 'demonewtest_group'
           backendAzureRmStorageAccountName: 'demonewtestgroupa219'
