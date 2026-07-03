@@ -55,36 +55,35 @@ resource "azapi_resource" "storage" {
 }
 
 #----------------------------------------------------
-# RBAC Permissions for Logic App Managed Identity
+# RBAC Permissions
 #----------------------------------------------------
 
 resource "azurerm_role_assignment" "storage_account_contributor" {
-  scope                = azurerm_storage_account.storage.id
+  scope                = azapi_resource.storage.id
   role_definition_name = "Storage Account Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
 resource "azurerm_role_assignment" "blob" {
-  scope                = azurerm_storage_account.storage.id
+  scope                = azapi_resource.storage.id
   role_definition_name = "Storage Blob Data Owner"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
 resource "azurerm_role_assignment" "queue" {
-  scope                = azurerm_storage_account.storage.id
+  scope                = azapi_resource.storage.id
   role_definition_name = "Storage Queue Data Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
 resource "azurerm_role_assignment" "table" {
-  scope                = azurerm_storage_account.storage.id
+  scope                = azapi_resource.storage.id
   role_definition_name = "Storage Table Data Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
-# Optional but recommended for Windows Logic App Standard scenarios
 resource "azurerm_role_assignment" "file" {
-  scope                = azurerm_storage_account.storage.id
+  scope                = azapi_resource.storage.id
   role_definition_name = "Storage File Data SMB Share Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
