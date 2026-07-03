@@ -23,17 +23,11 @@ resource "azurerm_user_assigned_identity" "uami" {
 # Storage Account
 #----------------------------------------------------
 
-resource "azurerm_storage_account" "storage" {
-  name                          = var.storage_account_name
-  resource_group_name           = azurerm_resource_group.rg.name
-  location                      = azurerm_resource_group.rg.location
-  account_tier                  = "Standard"
-  account_replication_type      = "LRS"
-  public_network_access_enabled = true
-  min_tls_version               = "TLS1_2"
-
-  # Key-based authentication disabled
-  shared_access_key_enabled = false
+resource "azapi_resource" "storage" {
+  type      = "Microsoft.Storage/storageAccounts@2023-05-01"
+  name      = var.storage_account_name
+  parent_id = azurerm_resource_group.rg.id
+  location  = azurerm_resource_group.rg.location
 
   identity {
     type = "UserAssigned"
@@ -41,6 +35,22 @@ resource "azurerm_storage_account" "storage" {
     identity_ids = [
       azurerm_user_assigned_identity.uami.id
     ]
+  }
+
+  body = {
+    sku = {
+      name = "Standard_LRS"
+    }
+
+    kind = "StorageV2"
+
+    properties = {
+      minimumTlsVersion        = "TLS1_2"
+      allowBlobPublicAccess    = false
+      allowSharedKeyAccess     = false
+      publicNetworkAccess      = "Enabled"
+      supportsHttpsTrafficOnly = true
+    }
   }
 }
 
