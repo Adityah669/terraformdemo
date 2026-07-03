@@ -33,7 +33,14 @@ account_tier = "Standard"
 account_replication_type = "LRS"
 public_network_access_enabled = true
 min_tls_version = "TLS1_2"
-shared_access_key_enabled = false
+shared_access_key_enabled = 
+
+ identity {
+    type         = "UserAssigned"
+    identity_ids = [
+      azurerm_user_assigned_identity.uami.id
+    ]
+  }
 }
 
 
