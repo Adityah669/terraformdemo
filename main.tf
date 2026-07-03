@@ -26,29 +26,23 @@ resource "azurerm_user_assigned_identity" "uami" {
 #----------------------------------------------------
 
 resource "azurerm_storage_account" "storage" {
-  name                     = var.storage_account_name
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-  public_network_access_enabled = true
-
-  min_tls_version = "TLS1_2"
+name = var.storage_account_name
+resource_group_name = azurerm_resource_group.rg.name
+location = azurerm_resource_group.rg.location
+account_tier = "Standard"
+account_replication_type = "LRS"
+public_network_access_enabled = true
+min_tls_version = "TLS1_2"
+shared_access_key_enabled = false
 }
 
-resource "azurerm_storage_share" "content" {
-  name               = "logicapp-content"
-  storage_account_id = azurerm_storage_account.storage.id
-  quota              = 100
-}
 
 #----------------------------------------------------
 # RBAC Permissions
 #----------------------------------------------------
 resource "azurerm_role_assignment" "Storage" {
   scope                = azurerm_storage_account.storage.id
-  role_definition_name = "Storage Account Contributor "
+  role_definition_name = "Storage Account Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
