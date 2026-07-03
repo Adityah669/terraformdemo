@@ -1,7 +1,5 @@
-terraform {
-  required_version = ">= 1.5"
 
-}
+
 #----------------------------------------------------
 # Resource Group
 #----------------------------------------------------
@@ -26,28 +24,31 @@ resource "azurerm_user_assigned_identity" "uami" {
 #----------------------------------------------------
 
 resource "azurerm_storage_account" "storage" {
-name = var.storage_account_name
-resource_group_name = azurerm_resource_group.rg.name
-location = azurerm_resource_group.rg.location
-account_tier = "Standard"
-account_replication_type = "LRS"
-public_network_access_enabled = true
-min_tls_version = "TLS1_2"
-shared_access_key_enabled = false
+  name                          = var.storage_account_name
+  resource_group_name           = azurerm_resource_group.rg.name
+  location                      = azurerm_resource_group.rg.location
+  account_tier                  = "Standard"
+  account_replication_type      = "LRS"
+  public_network_access_enabled = true
+  min_tls_version               = "TLS1_2"
 
- identity {
-    type         = "UserAssigned"
+  # Key-based authentication disabled
+  shared_access_key_enabled = false
+
+  identity {
+    type = "UserAssigned"
+
     identity_ids = [
       azurerm_user_assigned_identity.uami.id
     ]
   }
 }
 
+#----------------------------------------------------
+# RBAC Permissions for Logic App Managed Identity
+#----------------------------------------------------
 
-#----------------------------------------------------
-# RBAC Permissions
-#----------------------------------------------------
-resource "azurerm_role_assignment" "Storage" {
+resource "azurerm_role_assignment" "storage_account_contributor" {
   scope                = azurerm_storage_account.storage.id
   role_definition_name = "Storage Account Contributor"
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
@@ -71,12 +72,18 @@ resource "azurerm_role_assignment" "table" {
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 }
 
+# Optional but recommended for Windows Logic App Standard scenarios
+resource "azurerm_role_assignment" "file" {
+  scope                = azurerm_storage_account.storage.id
+  role_definition_name = "Storage File Data SMB Share Contributor"
+  principal_id         = azurerm_user_assigned_identity.uami.principal_id
+}
+
 #----------------------------------------------------
-# App Service Plan
+# App Service Plan - Workflow Standard
 #----------------------------------------------------
 
 resource "azurerm_service_plan" "plan" {
-
   name                = "logicapp-ws-plan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -86,54 +93,100 @@ resource "azurerm_service_plan" "plan" {
 }
 
 #----------------------------------------------------
-# Logic App Standard
+# Logic App Standard using AzAPI
 #----------------------------------------------------
 
-resource "azurerm_logic_app_standard" "logicapp" {
-
-  name                       = var.logicapp_name
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  app_service_plan_id        = azurerm_service_plan.plan.id
-  storage_account_access_key = azurerm_storage_account.storage.primary_access_key
-  storage_account_name       = azurerm_storage_account.storage.name
-
+resource "azapi_resource" "logicapp" {
+  type      = "Microsoft.Web/sites@2023-12-01"
+  name      = var.logicapp_name
+  parent_id = azurerm_resource_group.rg.id
+  location  = azurerm_resource_group.rg.location
 
   identity {
-    type         = "UserAssigned"
+    type = "UserAssigned"
+
     identity_ids = [
       azurerm_user_assigned_identity.uami.id
     ]
   }
 
-  app_settings = {
+  body = {
+    kind = "functionapp,workflowapp"
 
-    FUNCTIONS_WORKER_RUNTIME      = "node"
-    AzureFunctionsJobHost__extensionBundle__version  = "[1.*, 2.0.0)"
-    WEBSITE_NODE_DEFAULT_VERSION  = "22"
-    FUNCTIONS_EXTENSION_VERSION   = "~4"
-    WEBSITE_RUN_FROM_PACKAGE      = "1"
+    properties = {
+      serverFarmId = azurerm_service_plan.plan.id
 
-    ##################################################
-    # Identity Based Storage Configuration
-    ##################################################
+      httpsOnly = true
 
-    AzureWebJobsStorage__accountName = azurerm_storage_account.storage.name
+      siteConfig = {
+        appSettings = [
+          {
+            name  = "FUNCTIONS_WORKER_RUNTIME"
+            value = "node"
+          },
+          {
+            name  = "FUNCTIONS_EXTENSION_VERSION"
+            value = "~4"
+          },
+          {
+            name  = "AzureFunctionsJobHost__extensionBundle__version"
+            value = "[1.*, 2.0.0)"
+          },
+          {
+            name  = "WEBSITE_NODE_DEFAULT_VERSION"
+            value = "22"
+          },
+          {
+            name  = "WEBSITE_RUN_FROM_PACKAGE"
+            value = "1"
+          },
+          {
+            name  = "APP_KIND"
+            value = "workflowApp"
+          },
+          {
+            name  = "WORKFLOWS_TENANT_ID"
+            value = data.azurerm_client_config.current.tenant_id
+          },
 
-    AzureWebJobsStorage__credentialType ="managedidentity"
+          ##################################################
+          # Identity-Based AzureWebJobsStorage Configuration
+          ##################################################
 
-    AzureWebJobsStorage__managedIdentityResourceId = azurerm_user_assigned_identity.uami.id
-
-    AzureWebJobsStorage__blobServiceUri = "https://${azurerm_storage_account.storage.name}.blob.core.windows.net"
-
-    AzureWebJobsStorage__queueServiceUri ="https://${azurerm_storage_account.storage.name}.queue.core.windows.net"
-
-    AzureWebJobsStorage__tableServiceUri ="https://${azurerm_storage_account.storage.name}.table.core.windows.net"
+          {
+            name  = "AzureWebJobsStorage__accountName"
+            value = azurerm_storage_account.storage.name
+          },
+          {
+            name  = "AzureWebJobsStorage__credential"
+            value = "managedidentity"
+          },
+          {
+            name  = "AzureWebJobsStorage__clientId"
+            value = azurerm_user_assigned_identity.uami.client_id
+          },
+          {
+            name  = "AzureWebJobsStorage__blobServiceUri"
+            value = "https://${azurerm_storage_account.storage.name}.blob.core.windows.net"
+          },
+          {
+            name  = "AzureWebJobsStorage__queueServiceUri"
+            value = "https://${azurerm_storage_account.storage.name}.queue.core.windows.net"
+          },
+          {
+            name  = "AzureWebJobsStorage__tableServiceUri"
+            value = "https://${azurerm_storage_account.storage.name}.table.core.windows.net"
+          }
+        ]
+      }
+    }
   }
 
   depends_on = [
+    azurerm_role_assignment.storage_account_contributor,
     azurerm_role_assignment.blob,
     azurerm_role_assignment.queue,
-    azurerm_role_assignment.table
+    azurerm_role_assignment.table,
+    azurerm_role_assignment.file
   ]
 }
